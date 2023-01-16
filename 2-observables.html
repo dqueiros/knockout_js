@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Exemplo Knockout</title>
+        <meta charset="UTF-8">
+        <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <br />
+                    <br />
+                    <label data-bind="text: labelText" for="">Label</label>
+                    <input type="text" data-bind="value: inputValue">
+                    <br />
+                    <ul data-bind="foreach: list">
+                        <li data-bind="text: $data"></li>
+                    </ul>
+                    <br />
+                    <button class="btn btn-primary" data-bind="click: buttonAction">Ação</button>
+                </div>
+            </div>
+        </div>
+        <script src="../knockout-3.5.1/knockout-3.5.1.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            
+            // Lendo
+            //     viewmodel.observable()
+            // Escrevendo
+            //     viewmodel.observable("valor")
+            // Escrevendo (chainning)
+            //     viewmodel.observableA("valor").observableB("valor")
+            // Inscrição em um observer
+            //     Var _subscribe = self.property.subscribe(function(novoValor){//TODO});
+            // Cancelando uma inscrição
+            //     Var _subscribe.dispose()
+            // Parametros (extends) e eventos
+            //     notify, rateLimit, change, beforeChange
+
+            function ViewModel(){
+                var self = this;
+
+                self.labelText = ko.observable("Label text");
+                self.inputValue = ko.observable("Input value");
+                self.list = ko.observableArray([1,3,5,7,9,11]);
+                self.buttonAction = function(){
+                    //console.log("clicked button");
+                    //self.list.splice(2,1); remove o item da posição 2
+                    self.list.splice(0,0,100); //adiciona 1 item na posição 0
+                };
+
+                self.inputValue.subscribe(function(novoValor){
+                    if(novoValor == "100")
+                        self.labelText("Certo!!");
+                    else
+                        self.labelText("Errado!!");
+                });
+
+                // Cancelando uma inscrição (Exemplo)
+                // var subscribe = self.inputValue.subscribe(function(novoValor){
+                //     if(novoValor == "100")
+                //         subscribe.dispose();
+                //     else
+                //         self.labelText("Errado!!");
+                // });
+            }
+
+            vm = new ViewModel();
+            ko.applyBindings(vm);
+
+        </script>
+    </body>
+</html>

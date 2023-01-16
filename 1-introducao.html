@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Exemplo Knockout</title>
+        <meta charset="UTF-8">
+        <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <br />
+                    <br />
+                    <label data-bind="text: labelText" for="">Label</label>
+                    <input type="text" data-bind="value: inputValue">
+                    <br />
+                    <button class="btn btn-primary" data-bind="click: buttonAction">Ação</button>
+                </div>
+            </div>
+        </div>
+        <script src="../knockout-3.5.1/knockout-3.5.1.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            
+            function ViewModel(){
+                var self = this;
+
+                self.labelText = "Label text";
+                self.inputValue = "Input value";
+                self.buttonAction = function(){
+                    console.log("clicked button");
+                };
+            }
+
+            vm = new ViewModel();
+            ko.applyBindings(vm);
+
+        </script>
+    </body>
+</html>

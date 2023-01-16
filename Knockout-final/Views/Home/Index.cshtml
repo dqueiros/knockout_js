@@ -1,0 +1,109 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/html" id="item-lista-template">
+    <h3 data-bind="text: titulo"></h3>
+    <p data-bind="text: conteudo"></p>
+    <hr>
+</script>
+
+<br><br>
+<div class="panel panel-default">
+    <div class="panel-heading"><h4>Template Bindings</h4></div>
+    <div class="panel-body">
+        <!-- Linha superior -->
+        <div class="row">
+            <div class="col-xs-12">
+                <label>Titulo</label>
+                <input type="text" data-bind="value: titulo" />
+                <label>Conteudo</label>
+                <input type="text" data-bind="value: conteudo"/>
+                <buttton class="btn btn-primary" data-bind="click: criar">Criar</buttton>
+            </div>
+        </div>
+        <div class="row">
+            <!-- COL ESQUERDA -->
+            <div class="col-xs-6">
+                <br />
+                <ul class="list-group" data-bind="template:{name:'item-lista-template', foreach: lista}"></ul>
+            </div>
+            <!-- COL DIREITA -->
+            <div class="col-xs-6">
+                <div class="row">
+                    <div class="col-xs-12">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section JS{
+<script src="@Url.Content("~/Scripts/jquery-1.9.1.min.js")"></script>
+<script src="@Url.Content("~/Scripts/knockout-3.4.0.js")"></script>
+<script type="text/javascript">
+
+    function Model(titulo, conteudo) {
+        this.titulo = ko.observable(titulo);
+        this.conteudo = ko.observable(titulo);
+        this.status = ko.observable();
+    }
+
+    function ViewModel() {
+
+        var self = this;
+        self.titulo = ko.observable();
+        self.conteudo = ko.observable();
+
+        self.lista = ko.observableArray([]);
+
+        //http://localhost:10795/Home/GetList
+        self.carregar = function () {
+            $.post("http://localhost:10795/Home/GetList")
+                .success(function (response) {
+                    self.lista(response);
+                });
+        };
+
+        //http://localhost:10795/Home/Create
+        self.criar = function () {
+
+            var model = new Model(self.titulo(), self.conteudo());
+
+            //self.lista.push(model);
+            $.post("http://localhost:10795/Home/Create", model)
+                .success(function (response) {
+                    self.carregar();
+                    self.titulo("");
+                    self.conteudo("");
+                });
+            
+        }
+    }
+
+    vm = new ViewModel();
+
+    ko.applyBindings(vm);
+
+    vm.carregar();
+
+
+</script>
+
+}
+
+@section Style{
+<style>
+    .item-checked {
+        color: #ddd;
+        text-decoration: line-through;
+    }
+
+    .total {
+        padding: 0 2px;
+    }
+</style>
+}
